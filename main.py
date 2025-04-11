@@ -47,6 +47,15 @@ def extract_text_from_file(file_path: str) -> str:
         raise ValueError("Unsupported file format. Only PDF and TXT are allowed.")
 
 # ========== API Endpoint ========== #
+@app.get("/")
+async def root():
+    return {
+        "message": "✅ Legal Research API is running!",
+        "docs": "/docs",
+        "endpoint": "/ask-legal-question"
+    }
+
+
 @app.post("/ask-legal-question")
 async def ask_legal_question(file: UploadFile = File(...), question: str = Form(...)):
     try:
@@ -68,6 +77,7 @@ async def ask_legal_question(file: UploadFile = File(...), question: str = Form(
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
